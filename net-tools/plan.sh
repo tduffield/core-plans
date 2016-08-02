@@ -11,6 +11,7 @@ pkg_deps=(core/glibc core/coreutils)
 pkg_build_deps=(core/coreutils core/diffutils core/patch core/make core/gcc)
 pkg_lib_dirs=(lib)
 pkg_include_dirs=(include)
+pkg_bin_dirs=(bin sbin)
 
 do_build() {
     fix_interpreter "configure.sh" core/coreutils bin/env

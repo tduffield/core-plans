@@ -12,6 +12,8 @@ pkg_deps=(
   core/coreutils
   core/ruby
   core/readline
+  # Inspec uses netstat to check for open ports
+  metadave/net-tools
 )
 pkg_build_deps=(
   core/bundler
