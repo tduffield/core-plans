@@ -11,12 +11,14 @@ pkg_source=false
 pkg_deps=(
   core/coreutils
   core/ruby
+  core/readline
 )
 pkg_build_deps=(
   core/bundler
   core/coreutils
   core/gcc
   core/make
+  core/readline
 )
 pkg_bin_dirs=(bin)
 
@@ -41,11 +43,19 @@ GEMFILE
 }
 
 do_build() {
+  local _bundler_dir=$(pkg_path_for bundler)
+  export GEM_HOME=${pkg_path}/vendor/bundle
+  export GEM_PATH=${_bundler_dir}:${GEM_HOME}
+
   export BUNDLE_SILENCE_ROOT_WARNING=1 GEM_PATH
-  GEM_PATH="$(pkg_path_for core/bundler)"
+  #GEM_PATH="$(pkg_path_for core/bundler)"
   bundle install --jobs "$(nproc)" --retry 5 --standalone \
     --path "$pkg_prefix/bundle" \
     --binstubs "$pkg_prefix/bin"
+
+   #--jobs 2 --retry 5 --path vendor/bundle --binstubs
+
+
 }
 
 do_install () {
