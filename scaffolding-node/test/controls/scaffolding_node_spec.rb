@@ -25,7 +25,7 @@
     describe command("hab pkg exec #{ENV['HAB_ORIGIN']}/docco docco --version") do
       let(:build) { "build" }
       # This could be overriden to use another build of the build script:
-      let(:build) { "hab pkg exec smith/hab-plan-build hab-plan-build" }
+      # let(:build) { "hab pkg exec smith/hab-plan-build hab-plan-build" }
 
       before do
         command("#{build} /src/scaffolding-node/examples/#{example}")
