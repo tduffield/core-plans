@@ -16,24 +16,48 @@
 # limitations under the License.
 #
 
-# These controls build the example plans in examples and ensure they install a
-# package and run the command specified.
-%w{ pkg_source_git_https
-    pkg_source_npm_registry
-    pkg_source_tarball }.each do |example|
-  control "Habitat Node.js Scaffolding (#{example} example)" do
-    describe command("hab pkg exec #{ENV['HAB_ORIGIN']}/docco docco --version") do
-      let(:build) { "build" }
-      # This could be overriden to use another build of the build script:
-      # let(:build) { "hab pkg exec smith/hab-plan-build hab-plan-build" }
+title "Habitat Node.js Scaffolding"
 
-      before do
-        command("#{build} /src/scaffolding-node/examples/#{example}")
-      end
+build = attribute(:build,
+  default: "/hab/bin/build",
+  description: "Command to build a Habitat package in a studio")
+docco_command = attribute(:docco_command,
+  default: "/hab/bin/hab pkg exec #{ENV['HAB_ORIGIN']}/docco docco",
+  description: "Command to run docco")
+examples_path = attribute(:examples_path,
+  default: "/src/scaffolding-node/examples",
+  description: "Path to examples")
 
-      its(:stdout) { should eq "0.7.0\n" }
-      its(:exit_status) { should eq 0 }
+control "pkg_source Git HTTPS example" do
+  describe command("#{docco_command} --version") do
+    before do
+      command("#{build} #{examples_path}/pkg_source_git_https").result
     end
+
+    its(:stdout) { should eq "0.7.0\n" }
+    its(:exit_status) { should eq 0 }
+  end
+end
+
+control "pkg_source NPM Registry example" do
+  describe command("#{docco_command} --version") do
+    before do
+      command("#{build} #{examples_path}/pkg_source_npm_registry").result
+    end
+
+    its(:stdout) { should eq "0.7.0\n" }
+    its(:exit_status) { should eq 0 }
+  end
+end
+
+control "pkg_source tarball example" do
+  describe command("#{docco_command} --version") do
+    before do
+      command("#{build} #{examples_path}/pkg_source_tarball").result
+    end
+
+    its(:stdout) { should eq "0.7.0\n" }
+    its(:exit_status) { should eq 0 }
   end
 end
 
